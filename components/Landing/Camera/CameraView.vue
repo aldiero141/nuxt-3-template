@@ -1,13 +1,14 @@
 <template>
   <div class="flex flex-col justify-center items-center w-full">
-    <mdicon
+    <!-- <mdicon
       class="absolute top-7 right-2 hover:bg-blue-400 hover:bg-opacity-10 cursor-pointer rounded-lg"
       name="close"
       width="25"
       height="25"
       style="color: white; z-index: 9999"
       @click="close()"
-    />
+    /> -->
+
     <video
       v-if="!capturedImage[0]"
       class="w-full h-full"
@@ -15,19 +16,38 @@
       autoplay
       playsinline
     />
+
+    <div
+      v-if="!capturedImage[0]"
+      class="w-full h-full fixed bg-black bg-opacity-20"
+      style="
+        z-index: 9999;
+        border: solid 2px white;
+        box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.5);
+      "
+      id="masking"
+    >
+      <div></div>
+    </div>
+
     <img
       v-if="capturedImage[0]"
       :src="capturedImage[0]"
       alt="capture-preview"
     />
 
-    <div v-if="!capturedImage[0]" class="fixed bottom-10 left-0 right-0 px-16">
-      <Button class="mb-4" :text="'Take Picture'" @click="capture()" />
-      <Button :type="'danger'" :text="'Cancel'" @click="close()" />
-    </div>
-    <div v-if="capturedImage[0]" class="fixed bottom-10 left-0 right-0 px-16">
-      <Button class="mb-4" :text="'Use Picture'" @click="$emit('back')" />
-      <Button :text="'Retake Picture'" @click="createCameraElement()" />
+    <div style="z-index: 999999">
+      <div
+        v-if="!capturedImage[0]"
+        class="fixed bottom-10 left-0 right-0 px-16"
+      >
+        <Button class="mb-4" :text="'Take Picture'" @click="capture()" />
+        <Button :type="'danger'" :text="'Cancel'" @click="close()" />
+      </div>
+      <div v-if="capturedImage[0]" class="fixed bottom-10 left-0 right-0 px-16">
+        <Button class="mb-4" :text="'Use Picture'" @click="$emit('back')" />
+        <Button :text="'Retake Picture'" @click="createCameraElement()" />
+      </div>
     </div>
   </div>
 </template>
@@ -109,6 +129,28 @@ function close() {
   emit("back");
 }
 // CREATE CAMERA END =======================================================================================
+
+// CREATE MASKING START  ===================================================================================
+// function setMasking() {
+//   const video = document.getElementById("video");
+//   const height = (video.videoHeight * 20) / 100;
+//   const width = (video.videoWidth * 20) / 100;
+
+//   console.log("SIZE MASKING ======", height, width);
+
+//   // return {
+//   //   width: `${width}`,
+//   //   height: `${height}`,
+//   //   "border-radius": "10px",
+//   // };
+
+//   return {
+//     width: "200px",
+//     height: "300px",
+//     "border-radius": "50% 50% 50% 50% / 40% 40% 60% 60%",
+//   };
+// }
+// CREATE MASKING END ======================================================================================
 
 // CAPTURE CAMERA START ====================================================================================
 const emit = defineEmits(["on:capture", "on:change", "back"]);
